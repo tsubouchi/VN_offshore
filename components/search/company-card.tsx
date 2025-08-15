@@ -11,7 +11,7 @@ interface CompanyCardProps {
     industries?: string[]
     technologies?: string[]
   }
-  onContact: (companyId: string) => void
+  onContact: (company: Company & { industries?: string[]; technologies?: string[] }) => void
   onViewProfile: (companyId: string) => void
 }
 
@@ -141,7 +141,7 @@ export function CompanyCard({ company, onContact, onViewProfile }: CompanyCardPr
           <Button variant="outline" className="flex-1 bg-transparent" onClick={() => onViewProfile(company.id)}>
             View Profile
           </Button>
-          <Button className="flex-1" onClick={() => onContact(company.id)}>
+          <Button className="flex-1" onClick={() => onContact(company)}>
             <MessageCircle className="h-4 w-4 mr-2" />
             Contact
           </Button>

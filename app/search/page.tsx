@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { SearchFilters, type SearchFilters as SearchFiltersType } from "@/components/search/search-filters"
 import { CompanyCard } from "@/components/search/company-card"
+import { InquiryModal } from "@/components/inquiry/inquiry-modal"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Filter } from "lucide-react"
@@ -83,8 +85,13 @@ const MOCK_COMPANIES: (Company & { industries: string[]; technologies: string[] 
 ]
 
 export default function SearchPage() {
+  const router = useRouter()
   const [companies, setCompanies] = useState(MOCK_COMPANIES)
   const [filteredCompanies, setFilteredCompanies] = useState(MOCK_COMPANIES)
+  const [selectedCompany, setSelectedCompany] = useState<
+    (Company & { industries?: string[]; technologies?: string[] }) | null
+  >(null)
+  const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false)
   const [filters, setFilters] = useState<SearchFiltersType>({
     search: "",
     industries: [],
@@ -184,14 +191,20 @@ export default function SearchPage() {
     setFilteredCompanies(filtered)
   }
 
-  const handleContact = (companyId: string) => {
-    // TODO: Implement contact functionality
-    console.log("Contact company:", companyId)
+  const handleContact = (company: Company & { industries?: string[]; technologies?: string[] }) => {
+    setSelectedCompany(company)
+    setIsInquiryModalOpen(true)
+  }
+
+  const handleStartChat = (companyId: string, initialMessage: string) => {
+    console.log("Starting chat with company:", companyId, "Message:", initialMessage)
+    // TODO: Create new conversation in database
+    // TODO: Navigate to chat interface
+    router.push("/messages")
   }
 
   const handleViewProfile = (companyId: string) => {
-    // TODO: Navigate to company profile
-    console.log("View profile:", companyId)
+    router.push(`/company/${companyId}`)
   }
 
   return (
@@ -263,6 +276,19 @@ export default function SearchPage() {
           </div>
         </div>
       </div>
+
+      {/* Inquiry Modal */}
+      {selectedCompany && (
+        <InquiryModal
+          isOpen={isInquiryModalOpen}
+          onClose={() => {
+            setIsInquiryModalOpen(false)
+            setSelectedCompany(null)
+          }}
+          company={selectedCompany}
+          onStartChat={handleStartChat}
+        />
+      )}
     </div>
   )
 }

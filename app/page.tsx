@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
+import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -227,11 +228,14 @@ export default function HomePage() {
               <Card key={vendor.id} className="hover:shadow-lg transition-shadow cursor-pointer">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-3 mb-4">
-                    <img
-                      src={vendor.image || "/placeholder.svg"}
-                      alt={vendor.name}
-                      className="w-12 h-12 rounded-lg object-cover"
-                    />
+                    <div className="relative w-12 h-12 rounded-lg overflow-hidden">
+                      <Image
+                        src={vendor.image || "/placeholder.svg"}
+                        alt={vendor.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div>
                       <h3 className="font-semibold text-card-foreground">{vendor.name}</h3>
                       <p className="text-sm text-muted-foreground flex items-center">

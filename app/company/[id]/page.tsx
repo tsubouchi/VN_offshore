@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Star, MapPin, Users, Globe, Calendar, Award, MessageCircle, ExternalLink } from "lucide-react"
 import type { Company } from "@/lib/supabase"
 import Link from "next/link"
+import Image from "next/image"
 
 interface Portfolio {
   id: string
@@ -118,8 +119,8 @@ const MOCK_COMPANY: Company & {
   ],
 }
 
-export default function CompanyProfilePage({ params }: { params: { id: string } }) {
-  const [company, setCompany] = useState(MOCK_COMPANY)
+export default function CompanyProfilePage() {
+  const [company] = useState(MOCK_COMPANY)
 
   const renderStars = (rating: number, size?: string) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -139,10 +140,12 @@ export default function CompanyProfilePage({ params }: { params: { id: string } 
     <div className="min-h-screen bg-background">
       {/* Cover Image */}
       <div className="relative h-64 bg-gradient-to-r from-primary/10 to-accent/10">
-        <img
+        <Image
           src={company.cover_image_url || "/placeholder.svg?height=300&width=800&query=modern office building"}
           alt="Company cover"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-black/20" />
       </div>
@@ -152,12 +155,13 @@ export default function CompanyProfilePage({ params }: { params: { id: string } 
         <Card className="mb-8">
           <CardContent className="p-8">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              <div className="w-24 h-24 bg-white rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
+              <div className="relative w-24 h-24 bg-white rounded-lg shadow-lg flex items-center justify-center flex-shrink-0">
                 {company.logo_url ? (
-                  <img
+                  <Image
                     src={company.logo_url || "/placeholder.svg"}
                     alt={`${company.company_name} logo`}
-                    className="w-full h-full object-cover rounded-lg"
+                    fill
+                    className="object-cover rounded-lg"
                   />
                 ) : (
                   <div className="w-full h-full bg-primary/10 rounded-lg flex items-center justify-center">
@@ -322,11 +326,12 @@ export default function CompanyProfilePage({ params }: { params: { id: string } 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {company.portfolios.map((project) => (
                 <Card key={project.id} className="group hover:shadow-lg transition-shadow">
-                  <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
-                    <img
+                  <div className="relative aspect-video bg-muted rounded-t-lg overflow-hidden">
+                    <Image
                       src={project.image_url || "/placeholder.svg?height=200&width=300&query=project screenshot"}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-200"
                     />
                   </div>
                   <CardContent className="p-4">

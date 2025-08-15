@@ -86,7 +86,7 @@ const MOCK_COMPANIES: (Company & { industries: string[]; technologies: string[] 
 
 export default function SearchPage() {
   const router = useRouter()
-  const [companies, setCompanies] = useState(MOCK_COMPANIES)
+  const [companies] = useState(MOCK_COMPANIES)
   const [filteredCompanies, setFilteredCompanies] = useState(MOCK_COMPANIES)
   const [selectedCompany, setSelectedCompany] = useState<
     (Company & { industries?: string[]; technologies?: string[] }) | null
@@ -106,6 +106,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     applyFilters()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, companies])
 
   const applyFilters = () => {

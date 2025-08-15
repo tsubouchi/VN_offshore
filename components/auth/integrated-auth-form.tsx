@@ -36,8 +36,8 @@ export function IntegratedAuthForm({ onSuccess }: IntegratedAuthFormProps) {
       }
 
       onSuccess?.()
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setIsLoading(false)
     }
@@ -64,8 +64,8 @@ export function IntegratedAuthForm({ onSuccess }: IntegratedAuthFormProps) {
       }
 
       onSuccess?.()
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setIsLoading(false)
     }
@@ -84,8 +84,8 @@ export function IntegratedAuthForm({ onSuccess }: IntegratedAuthFormProps) {
       router.push("/search")
 
       onSuccess?.()
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
       setIsLoading(false)
     }

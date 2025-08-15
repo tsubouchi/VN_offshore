@@ -12,10 +12,6 @@ import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Plus, X, Upload, ExternalLink, Award } from "lucide-react"
 
-interface ProfileManagementProps {
-  companyId: string
-}
-
 const INDUSTRIES = [
   "Web Development",
   "Mobile App Development",
@@ -55,7 +51,7 @@ const TECHNOLOGIES = [
   "Kubernetes",
 ]
 
-export function ProfileManagement({ companyId }: ProfileManagementProps) {
+export function ProfileManagement() {
   const [companyInfo, setCompanyInfo] = useState({
     company_name: "TechViet Solutions",
     description:
@@ -112,7 +108,7 @@ export function ProfileManagement({ companyId }: ProfileManagementProps) {
     certificate_url: "",
   })
 
-  const handleCompanyInfoChange = (field: string, value: any) => {
+  const handleCompanyInfoChange = (field: string, value: string | number | string[]) => {
     setCompanyInfo((prev) => ({ ...prev, [field]: value }))
   }
 

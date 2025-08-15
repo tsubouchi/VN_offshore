@@ -3,13 +3,13 @@ import { generateAIResponse } from "@/lib/gemini-ai"
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, history } = await request.json()
+    const { message } = await request.json()
 
     if (!message) {
       return NextResponse.json({ error: "メッセージが必要です" }, { status: 400 })
     }
 
-    const response = await generateAIResponse(message, history)
+    const response = await generateAIResponse(message)
 
     return NextResponse.json({ response })
   } catch (error) {

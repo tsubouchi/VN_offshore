@@ -7,12 +7,25 @@ import { ReviewList } from "@/components/reviews/review-list"
 import { ReviewForm } from "@/components/reviews/review-form"
 import { Plus } from "lucide-react"
 
+interface ReviewData {
+  company_id: string
+  rating: number
+  title: string
+  content: string
+  communication_rating: number
+  quality_rating: number
+  timeline_rating: number
+  project_type: string
+  project_duration: string
+  would_recommend: boolean
+}
+
 // Mock data for demonstration
 const mockReviews = [
   {
     id: "1",
     company_id: "1",
-    reviewer_id: "buyer1",
+    reviewer_id: "00000000-0000-0000-0000-000000000001",
     rating: 5,
     title: "Excellent work on our e-commerce platform",
     content:
@@ -100,13 +113,13 @@ const mockSummary = {
 
 export default function CompanyReviewsPage({ params }: { params: { id: string } }) {
   const [showReviewForm, setShowReviewForm] = useState(false)
-  const [reviews, setReviews] = useState(mockReviews)
+  const [reviews] = useState(mockReviews)
 
   // TODO: Get from authenticated user
   const canWriteReview = true // User is a buyer and has worked with this company
   const canRespond = false // User is the company owner
 
-  const handleSubmitReview = async (reviewData: any) => {
+  const handleSubmitReview = async (reviewData: ReviewData) => {
     // TODO: Submit review to database
     console.log("Submitting review:", reviewData)
     setShowReviewForm(false)

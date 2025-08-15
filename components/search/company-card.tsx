@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, MapPin, Users, Globe, MessageCircle } from "lucide-react"
 import type { Company } from "@/lib/supabase"
+import Image from "next/image"
 
 interface CompanyCardProps {
   company: Company & {
@@ -30,12 +31,13 @@ export function CompanyCard({ company, onContact, onViewProfile }: CompanyCardPr
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center">
+            <div className="relative w-16 h-16 bg-muted rounded-lg flex items-center justify-center">
               {company.logo_url ? (
-                <img
+                <Image
                   src={company.logo_url || "/placeholder.svg"}
                   alt={`${company.company_name} logo`}
-                  className="w-full h-full object-cover rounded-lg"
+                  fill
+                  className="object-cover rounded-lg"
                 />
               ) : (
                 <div className="w-full h-full bg-primary/10 rounded-lg flex items-center justify-center">

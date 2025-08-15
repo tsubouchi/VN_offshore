@@ -18,8 +18,8 @@ export default function MessagesPage() {
   } | null>(null)
 
   // TODO: Get from authenticated user
-  const currentUserId = "buyer1" // Changed to buyer1 to match the flow from search
-  const currentUserRole = "buyer" as const // Changed to buyer to match Japanese companies searching for Vietnamese teams
+  const currentUserId = "00000000-0000-0000-0000-000000000001" // Guest buyer UUID
+  const currentUserRole = "buyer" as "buyer" | "vendor" // Changed to buyer to match Japanese companies searching for Vietnamese teams
 
   useEffect(() => {
     const conversationData = sessionStorage.getItem("newConversation")

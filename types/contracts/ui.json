@@ -1,0 +1,79 @@
+{
+  "timestamp": "2025-08-15T09:49:53.653Z",
+  "source": "TypeScript",
+  "types": {
+    "user": {
+      "properties": {
+        "id": "string",
+        "email": "string",
+        "role": "UserRole",
+        "company_name": "string",
+        "contact_person": "string",
+        "phone": "string?",
+        "country": "string",
+        "created_at": "string",
+        "updated_at": "string",
+        "is_active": "boolean",
+        "email_verified": "boolean",
+        "is_guest": "boolean?"
+      }
+    },
+    "company": {
+      "properties": {
+        "id": "string",
+        "user_id": "string",
+        "company_name": "string",
+        "description": "string?",
+        "website": "string?",
+        "established_year": "number?",
+        "employee_count": "number?",
+        "location": "string?",
+        "address": "string?",
+        "status": "CompanyStatus",
+        "logo_url": "string?",
+        "cover_image_url": "string?",
+        "hourly_rate_min": "number?",
+        "hourly_rate_max": "number?",
+        "currency": "string",
+        "average_rating": "number",
+        "total_reviews": "number",
+        "created_at": "string",
+        "updated_at": "string"
+      }
+    },
+    "message": {
+      "properties": {
+        "id": "string",
+        "sender_id": "string",
+        "receiver_id": "string",
+        "message": "string",
+        "created_at": "string",
+        "is_read": "boolean"
+      }
+    },
+    "review": {
+      "properties": {
+        "id": "string",
+        "company_id": "string",
+        "reviewer_id": "string",
+        "rating": "number",
+        "comment": "string?",
+        "created_at": "string",
+        "updated_at": "string"
+      }
+    }
+  },
+  "enums": {
+    "UserRole": [
+      "buyer",
+      "vendor",
+      "admin"
+    ],
+    "CompanyStatus": [
+      "pending",
+      "approved",
+      "rejected",
+      "suspended"
+    ]
+  }
+}

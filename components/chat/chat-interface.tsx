@@ -67,7 +67,7 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
   const mockConversations: Conversation[] = [
     {
       id: "conv1",
-      buyer_id: "buyer1",
+      buyer_id: "00000000-0000-0000-0000-000000000001",
       vendor_id: "vendor1",
       company_id: "comp1",
       last_message_at: "2024-01-15T10:30:00Z",
@@ -86,7 +86,7 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
     },
     {
       id: "conv2",
-      buyer_id: "buyer1",
+      buyer_id: "00000000-0000-0000-0000-000000000001",
       vendor_id: "vendor2",
       company_id: "comp2",
       last_message_at: "2024-01-14T15:45:00Z",
@@ -109,7 +109,7 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
     {
       id: "msg1",
       conversation_id: "conv1",
-      sender_id: "buyer1",
+      sender_id: "00000000-0000-0000-0000-000000000001",
       content: "Hello! I'm interested in your web development services for our e-commerce project.",
       is_read: true,
       created_at: "2024-01-15T09:00:00Z",
@@ -136,7 +136,7 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
     {
       id: "msg3",
       conversation_id: "conv1",
-      sender_id: "buyer1",
+      sender_id: "00000000-0000-0000-0000-000000000001",
       content:
         "We need a modern e-commerce platform with inventory management, payment integration, and mobile responsiveness. The timeline is about 6 months.",
       is_read: true,
@@ -170,7 +170,7 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
     if (newConversation) {
       const newConv: Conversation = {
         id: `conv_${Date.now()}`,
-        buyer_id: currentUserRole === "buyer" ? currentUserId : "buyer1",
+        buyer_id: currentUserRole === "buyer" ? currentUserId : "00000000-0000-0000-0000-000000000001",
         vendor_id: currentUserRole === "vendor" ? currentUserId : newConversation.companyId,
         company_id: newConversation.companyId,
         last_message_at: newConversation.timestamp,
@@ -220,6 +220,7 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
       setSelectedConversation(mockConversations[0])
       setMessages(mockMessages.filter((msg) => msg.conversation_id === mockConversations[0].id))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newConversation, currentUserId, currentUserRole])
 
   useEffect(() => {

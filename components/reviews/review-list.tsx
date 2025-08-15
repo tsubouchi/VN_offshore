@@ -75,7 +75,7 @@ export function ReviewList({ reviews, canRespond, onHelpful, onReport, onRespond
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-muted-foreground" />
-            <Select value={filterBy} onValueChange={(value: any) => setFilterBy(value)}>
+            <Select value={filterBy} onValueChange={(value) => setFilterBy(value as typeof filterBy)}>
               <SelectTrigger className="w-40">
                 <SelectValue />
               </SelectTrigger>
@@ -93,7 +93,7 @@ export function ReviewList({ reviews, canRespond, onHelpful, onReport, onRespond
 
           <div className="flex items-center gap-2">
             <SortAsc className="h-4 w-4 text-muted-foreground" />
-            <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+            <Select value={sortBy} onValueChange={(value) => setSortBy(value as typeof sortBy)}>
               <SelectTrigger className="w-40">
                 <SelectValue />
               </SelectTrigger>

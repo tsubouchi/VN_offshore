@@ -41,10 +41,13 @@
 - **フレームワーク**: Next.js 15.2.4
 - **UI**: React 19 + Tailwind CSS
 - **認証・DB**: Supabase
-- **AI**: Google Gemini AI
+- **AI**: Google Gemini AI (gemini-2.5-pro-preview-06-05)
 - **UIコンポーネント**: Radix UI + shadcn/ui
 - **フォーム**: React Hook Form + Zod
-- **その他**: TypeScript, pnpm
+- **テスト**: Jest + React Testing Library
+- **型チェック**: TypeScript (厳格モード)
+- **コード品質**: ESLint, Prettier
+- **パッケージ管理**: pnpm
 
 ## セットアップ
 
@@ -62,6 +65,38 @@ pnpm install
 npm run dev
 ```
 
+### 主要コマンド
+
+```bash
+# 開発
+npm run dev          # 開発サーバー起動
+npm run build        # プロダクションビルド
+npm run start        # プロダクションサーバー起動
+
+# コード品質 ✅
+pnpm lint            # ESLintでコードチェック（エラー・警告なし）
+pnpm type-check      # TypeScript型チェック（全チェック成功）
+
+# テスト ✅
+pnpm test            # テスト実行（全テスト成功）
+pnpm test:watch      # ウォッチモードでテスト
+pnpm test:coverage   # カバレッジレポート付きテスト（24テスト成功）
+
+# コントラクト検証 ✅
+pnpm contract          # コントラクト検証実行（全コントラクト有効）
+pnpm contract:extract  # コントラクト抽出
+pnpm contract:validate # コントラクトテスト実行（6テスト成功）
+```
+
+### コマンドステータス
+
+| コマンド | ステータス | 結果 |
+|---------|-----------|------|
+| `pnpm lint` | ✅ 成功 | ESLintエラー・警告なし |
+| `pnpm type-check` | ✅ 成功 | TypeScriptエラーなし |
+| `pnpm test:coverage` | ✅ 成功 | 24テスト全て成功 |
+| `pnpm contract` | ✅ 成功 | UI-DBコントラクト全て有効 |
+
 ### 環境変数
 
 `.env.local`ファイルを作成し、以下の環境変数を設定:
@@ -71,6 +106,21 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
 ```
+
+## プロジェクトの品質管理
+
+### 自動化された品質チェック
+
+1. **コード品質**: ESLintによる自動チェック
+2. **型安全性**: TypeScriptの厳格な型チェック
+3. **テスト**: Jestによる単体テスト・統合テスト
+4. **コントラクト検証**: UI-DB間の整合性自動検証
+
+### テストカバレッジ
+
+- コンポーネントテスト: FloatingChatbot等の主要UIコンポーネント
+- ライブラリテスト: Supabase, Gemini AI統合
+- コントラクトテスト: UI型とDBスキーマの整合性
 
 ## プロジェクト構成
 
@@ -98,6 +148,61 @@ NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
 /public            # 静的ファイル
 ```
 
+## Supabase概要
+
+### 使用している機能
+
+#### 認証 (Authentication)
+- メール/パスワードによるユーザー認証
+- ロールベースアクセス制御（バイヤー/ベンダー/管理者）
+- セッション管理
+
+#### データベース (Database)
+- PostgreSQLによるデータ管理
+- リアルタイムサブスクリプション
+- Row Level Security (RLS)による安全なデータアクセス
+
+#### ストレージ (Storage)
+- 企業ロゴのアップロード
+- ファイル添付機能
+
+### 主要テーブル
+
+| テーブル名 | 説明 |
+|------------|------|
+| users | ユーザーアカウント（役割：buyer/vendor/admin） |
+| companies | ベンダー企業情報（技術スタック、価格帯等） |
+| conversations | チャット会話 |
+| messages | チャットメッセージ |
+| reviews | 企業レビューと評価 |
+| notifications | 通知情報 |
+| inquiries | 問い合わせフォーム送信データ |
+| company_technologies | 企業の技術スキル |
+| company_projects | 企業のポートフォリオ |
+
+### データベースファイル構成
+
+```
+supabase/
+├── migrations/
+│   ├── 000_reset_database.sql        # DBリセット
+│   ├── 001_create_schema.sql         # スキーマ作成
+│   └── 002_enable_rls_policies.sql   # RLSポリシー
+├── seeds/
+│   └── 001_seed_data.sql            # サンプルデータ
+└── README.md                         # DB仕様書
+```
+
+### Supabase設定
+
+1. [Supabase](https://supabase.com)でプロジェクトを作成
+2. SQLエディタで以下の順序でファイルを実行：
+   - `migrations/000_reset_database.sql`
+   - `migrations/001_create_schema.sql`
+   - `migrations/002_enable_rls_policies.sql`
+   - `seeds/001_seed_data.sql`
+3. 環境変数に接続情報を設定
+
 ## デプロイ
 
 Vercelにデプロイ済み:
@@ -107,3 +212,26 @@ Vercelにデプロイ済み:
 
 v0.appでの開発を継続:
 **[https://v0.app/chat/projects/cNHwNTJw0rW](https://v0.app/chat/projects/cNHwNTJw0rW)**
+
+## トラブルシューティング
+
+### Supabaseに接続できない場合
+- 環境変数が正しく設定されているか確認
+- Supabaseプロジェクトがアクティブか確認
+- ネットワーク接続を確認
+- アプリはSupabaseなしでも動作（モックデータ使用）
+
+### 型エラーが発生する場合
+- `pnpm type-check`で詳細を確認
+- Supabase nullチェックに非nullアサーション（`!`）を使用
+- ユニオン型には型アサーション（`as`）を使用
+
+### テストが失敗する場合
+- `pnpm install`で依存関係を再インストール
+- `pnpm type-check`で型エラーを確認
+- テストファイルのパスが正しいか確認
+
+### コントラクト検証エラーの場合
+- UIが正しい設計となるため、DBスキーマを修正
+- `pnpm contract:extract`でコントラクトを再抽出
+- `pnpm contract:validate`で検証

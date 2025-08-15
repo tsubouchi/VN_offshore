@@ -1,0 +1,215 @@
+{
+  "timestamp": "2025-08-15T09:49:53.654Z",
+  "source": "Supabase",
+  "tables": {
+    "users": {
+      "columns": {
+        "id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "email": {
+          "type": "text",
+          "nullable": false
+        },
+        "role": {
+          "type": "text",
+          "nullable": false
+        },
+        "company_name": {
+          "type": "text",
+          "nullable": false
+        },
+        "contact_person": {
+          "type": "text",
+          "nullable": false
+        },
+        "phone": {
+          "type": "text",
+          "nullable": true
+        },
+        "country": {
+          "type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "updated_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "is_active": {
+          "type": "boolean",
+          "nullable": false
+        },
+        "email_verified": {
+          "type": "boolean",
+          "nullable": false
+        },
+        "is_guest": {
+          "type": "boolean",
+          "nullable": true
+        }
+      }
+    },
+    "companies": {
+      "columns": {
+        "id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "user_id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "company_name": {
+          "type": "text",
+          "nullable": false
+        },
+        "description": {
+          "type": "text",
+          "nullable": true
+        },
+        "website": {
+          "type": "text",
+          "nullable": true
+        },
+        "established_year": {
+          "type": "integer",
+          "nullable": true
+        },
+        "employee_count": {
+          "type": "integer",
+          "nullable": true
+        },
+        "location": {
+          "type": "text",
+          "nullable": true
+        },
+        "address": {
+          "type": "text",
+          "nullable": true
+        },
+        "status": {
+          "type": "text",
+          "nullable": false
+        },
+        "logo_url": {
+          "type": "text",
+          "nullable": true
+        },
+        "cover_image_url": {
+          "type": "text",
+          "nullable": true
+        },
+        "hourly_rate_min": {
+          "type": "numeric",
+          "nullable": true
+        },
+        "hourly_rate_max": {
+          "type": "numeric",
+          "nullable": true
+        },
+        "currency": {
+          "type": "text",
+          "nullable": false,
+          "default": "USD"
+        },
+        "average_rating": {
+          "type": "numeric",
+          "nullable": false,
+          "default": 0
+        },
+        "total_reviews": {
+          "type": "integer",
+          "nullable": false,
+          "default": 0
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "updated_at": {
+          "type": "timestamptz",
+          "nullable": false
+        }
+      }
+    },
+    "messages": {
+      "columns": {
+        "id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "sender_id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "receiver_id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "message": {
+          "type": "text",
+          "nullable": false
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "is_read": {
+          "type": "boolean",
+          "nullable": false,
+          "default": false
+        }
+      }
+    },
+    "reviews": {
+      "columns": {
+        "id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "company_id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "reviewer_id": {
+          "type": "uuid",
+          "nullable": false
+        },
+        "rating": {
+          "type": "integer",
+          "nullable": false
+        },
+        "comment": {
+          "type": "text",
+          "nullable": true
+        },
+        "created_at": {
+          "type": "timestamptz",
+          "nullable": false
+        },
+        "updated_at": {
+          "type": "timestamptz",
+          "nullable": false
+        }
+      }
+    }
+  },
+  "enums": {
+    "user_role": [
+      "buyer",
+      "vendor",
+      "admin"
+    ],
+    "company_status": [
+      "pending",
+      "approved",
+      "rejected",
+      "suspended"
+    ]
+  }
+}

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { MessageCircle, X, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,6 +27,15 @@ export function FloatingChatbot() {
   ])
   const [inputMessage, setInputMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return
@@ -123,7 +132,7 @@ export function FloatingChatbot() {
                     message.isUser ? "bg-black text-white" : "bg-gray-100 text-black"
                   }`}
                 >
-                  {message.text}
+                  <div className="whitespace-pre-wrap break-words">{message.text}</div>
                 </div>
               </div>
             ))}
@@ -144,6 +153,7 @@ export function FloatingChatbot() {
                 </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Input */}

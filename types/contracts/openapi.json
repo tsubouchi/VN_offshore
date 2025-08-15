@@ -1,0 +1,255 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Vietnam Offshore API",
+    "version": "1.0.0",
+    "description": "API for Vietnam Offshore Development Platform"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/chat": {
+      "post": {
+        "summary": "Send message to AI assistant",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "AI response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false
+          },
+          "email": {
+            "type": "string",
+            "nullable": false
+          },
+          "role": {
+            "type": "string",
+            "nullable": false
+          },
+          "company_name": {
+            "type": "string",
+            "nullable": false
+          },
+          "contact_person": {
+            "type": "string",
+            "nullable": false
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": false
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": false
+          },
+          "updated_at": {
+            "type": "string",
+            "nullable": false
+          },
+          "is_active": {
+            "type": "boolean",
+            "nullable": false
+          },
+          "email_verified": {
+            "type": "boolean",
+            "nullable": false
+          },
+          "is_guest": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "Company": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false
+          },
+          "user_id": {
+            "type": "string",
+            "nullable": false
+          },
+          "company_name": {
+            "type": "string",
+            "nullable": false
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "website": {
+            "type": "string",
+            "nullable": true
+          },
+          "established_year": {
+            "type": "number",
+            "nullable": true
+          },
+          "employee_count": {
+            "type": "number",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": false
+          },
+          "logo_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "cover_image_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "hourly_rate_min": {
+            "type": "number",
+            "nullable": true
+          },
+          "hourly_rate_max": {
+            "type": "number",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": false
+          },
+          "average_rating": {
+            "type": "number",
+            "nullable": false
+          },
+          "total_reviews": {
+            "type": "number",
+            "nullable": false
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": false
+          },
+          "updated_at": {
+            "type": "string",
+            "nullable": false
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false
+          },
+          "sender_id": {
+            "type": "string",
+            "nullable": false
+          },
+          "receiver_id": {
+            "type": "string",
+            "nullable": false
+          },
+          "message": {
+            "type": "string",
+            "nullable": false
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": false
+          },
+          "is_read": {
+            "type": "boolean",
+            "nullable": false
+          }
+        }
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false
+          },
+          "company_id": {
+            "type": "string",
+            "nullable": false
+          },
+          "reviewer_id": {
+            "type": "string",
+            "nullable": false
+          },
+          "rating": {
+            "type": "number",
+            "nullable": false
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "nullable": false
+          },
+          "updated_at": {
+            "type": "string",
+            "nullable": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -22,7 +22,7 @@ export interface User {
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<void>
+  signIn: (email: string, password?: string) => Promise<void>
   signUp: (
     email: string,
     password: string,
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false)
   }, [])
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string) => {
     // Mock sign in - in real app this would call Supabase
     const mockUser: User = {
       id: "user_" + Date.now(),

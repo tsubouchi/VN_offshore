@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai"
 
 export async function generateAIResponse(message: string): Promise<string> {
   try {
-    const apiKey = process.env.GEMINI_API_KEY || "AIzaSyDX8EkeJkVhsqK76SWz-S_euDYhV4gHGKU"
+    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "AIzaSyDX8EkeJkVhsqK76SWz-S_euDYhV4gHGKU"
 
     if (!apiKey) {
       return "AIチャットボット機能を利用するには、管理者にお問い合わせください。"
@@ -16,7 +16,8 @@ export async function generateAIResponse(message: string): Promise<string> {
       responseMimeType: "text/plain",
     }
 
-    const model = "gemini-pro"
+    // Use the latest Gemini model
+    const model = "gemini-2.5-pro-preview-06-05"
 
     const contents = [
       {
@@ -53,10 +54,10 @@ export async function generateAIResponse(message: string): Promise<string> {
     }
 
     return fullResponse || "申し訳ございませんが、回答を生成できませんでした。お問い合わせフォームをご利用ください。"
-  } catch (error: any) {
+  } catch (error) {
     console.error("Gemini AI Error:", error)
 
-    if (error?.message?.includes("API key not valid") || error?.status === 400) {
+    if (error instanceof Error && (error.message.includes("API key not valid") || ('status' in error && error.status === 400))) {
       return "AIチャットボット機能の設定に問題があります。現在、AIサポートは利用できません。お問い合わせフォームをご利用ください。"
     }
 

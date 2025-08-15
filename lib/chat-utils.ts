@@ -21,7 +21,11 @@ export interface ChatConversation {
 export class ChatService {
   // Subscribe to real-time messages for a conversation
   static subscribeToMessages(conversationId: string, callback: (message: ChatMessage) => void) {
-    return supabase
+    if (!supabase) {
+      console.warn("Supabase client not initialized")
+      return null
+    }
+    return supabase!
       .channel(`messages:${conversationId}`)
       .on(
         "postgres_changes",
@@ -40,7 +44,10 @@ export class ChatService {
 
   // Send a new message
   static async sendMessage(message: Omit<ChatMessage, "id" | "created_at">) {
-    const { data, error } = await supabase
+    if (!supabase) {
+      throw new Error("Supabase client not initialized")
+    }
+    const { data, error } = await supabase!
       .from("messages")
       .insert({
         ...message,
@@ -55,7 +62,10 @@ export class ChatService {
 
   // Get messages for a conversation
   static async getMessages(conversationId: string, limit = 50) {
-    const { data, error } = await supabase
+    if (!supabase) {
+      throw new Error("Supabase client not initialized")
+    }
+    const { data, error } = await supabase!
       .from("messages")
       .select(`
         *,
@@ -71,7 +81,10 @@ export class ChatService {
 
   // Get conversations for a user
   static async getConversations(userId: string) {
-    const { data, error } = await supabase
+    if (!supabase) {
+      throw new Error("Supabase client not initialized")
+    }
+    const { data, error } = await supabase!
       .from("conversations")
       .select(`
         *,
@@ -88,7 +101,10 @@ export class ChatService {
 
   // Mark messages as read
   static async markMessagesAsRead(conversationId: string, userId: string) {
-    const { error } = await supabase
+    if (!supabase) {
+      throw new Error("Supabase client not initialized")
+    }
+    const { error } = await supabase!
       .from("messages")
       .update({ is_read: true })
       .eq("conversation_id", conversationId)
@@ -99,8 +115,11 @@ export class ChatService {
 
   // Create or get existing conversation
   static async createConversation(buyerId: string, vendorId: string, companyId: string) {
+    if (!supabase) {
+      throw new Error("Supabase client not initialized")
+    }
     // First check if conversation already exists
-    const { data: existing } = await supabase
+    const { data: existing } = await supabase!
       .from("conversations")
       .select("*")
       .eq("buyer_id", buyerId)
@@ -111,7 +130,7 @@ export class ChatService {
     if (existing) return existing
 
     // Create new conversation
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from("conversations")
       .insert({
         buyer_id: buyerId,

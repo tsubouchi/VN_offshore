@@ -144,7 +144,7 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as any)} className="space-y-6">
+        <Tabs value={filter} onValueChange={(value) => setFilter(value as "all" | "unread" | "message" | "review" | "approval" | "system")} className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="all">すべて</TabsTrigger>
             <TabsTrigger value="unread">未読</TabsTrigger>

@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 import { AuthProvider } from "@/lib/auth-context"
 import Header from "@/components/header"
+import { FloatingChatbot } from "@/components/chatbot/floating-chatbot"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ html {
             <Header />
           </Suspense>
           {children}
+          <FloatingChatbot />
         </AuthProvider>
       </body>
     </html>

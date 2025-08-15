@@ -45,9 +45,16 @@ interface Conversation {
 interface ChatInterfaceProps {
   currentUserId: string
   currentUserRole: "buyer" | "vendor"
+  newConversation?: {
+    companyId: string
+    companyName: string
+    companyLogo?: string
+    initialMessage: string
+    timestamp: string
+  } | null
 }
 
-export function ChatInterface({ currentUserId, currentUserRole }: ChatInterfaceProps) {
+export function ChatInterface({ currentUserId, currentUserRole, newConversation }: ChatInterfaceProps) {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
@@ -159,11 +166,61 @@ export function ChatInterface({ currentUserId, currentUserRole }: ChatInterfaceP
   useEffect(() => {
     // Initialize with mock data
     setConversations(mockConversations)
-    if (mockConversations.length > 0) {
+
+    if (newConversation) {
+      const newConv: Conversation = {
+        id: `conv_${Date.now()}`,
+        buyer_id: currentUserRole === "buyer" ? currentUserId : "buyer1",
+        vendor_id: currentUserRole === "vendor" ? currentUserId : newConversation.companyId,
+        company_id: newConversation.companyId,
+        last_message_at: newConversation.timestamp,
+        buyer:
+          currentUserRole === "buyer"
+            ? {
+                company_name: "Your Company",
+                contact_person: "You",
+              }
+            : {
+                company_name: "Tokyo Tech Solutions",
+                contact_person: "Tanaka Hiroshi",
+              },
+        vendor:
+          currentUserRole === "vendor"
+            ? {
+                company_name: "Your Company",
+                contact_person: "You",
+              }
+            : {
+                company_name: newConversation.companyName,
+                contact_person: "Contact Person",
+              },
+        company: {
+          company_name: newConversation.companyName,
+          logo_url: newConversation.companyLogo,
+        },
+      }
+
+      const initialMessage: Message = {
+        id: `msg_${Date.now()}`,
+        conversation_id: newConv.id,
+        sender_id: currentUserId,
+        content: newConversation.initialMessage,
+        is_read: false,
+        created_at: newConversation.timestamp,
+        sender: {
+          company_name: currentUserRole === "buyer" ? "Your Company" : "Your Company",
+          role: currentUserRole,
+        },
+      }
+
+      setConversations((prev) => [newConv, ...prev])
+      setSelectedConversation(newConv)
+      setMessages([initialMessage])
+    } else if (mockConversations.length > 0) {
       setSelectedConversation(mockConversations[0])
       setMessages(mockMessages.filter((msg) => msg.conversation_id === mockConversations[0].id))
     }
-  }, [])
+  }, [newConversation, currentUserId, currentUserRole])
 
   useEffect(() => {
     scrollToBottom()

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ChatInterface } from "@/components/chat/chat-interface"
 import { ChatList } from "@/components/chat/chat-list"
 import { Button } from "@/components/ui/button"
@@ -9,19 +9,42 @@ import { ArrowLeft } from "lucide-react"
 export default function MessagesPage() {
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
   const [showChatList, setShowChatList] = useState(true)
+  const [newConversation, setNewConversation] = useState<{
+    companyId: string
+    companyName: string
+    companyLogo?: string
+    initialMessage: string
+    timestamp: string
+  } | null>(null)
 
   // TODO: Get from authenticated user
-  const currentUserId = "vendor1"
-  const currentUserRole = "vendor" as const
+  const currentUserId = "buyer1" // Changed to buyer1 to match the flow from search
+  const currentUserRole = "buyer" as const // Changed to buyer to match Japanese companies searching for Vietnamese teams
+
+  useEffect(() => {
+    const conversationData = sessionStorage.getItem("newConversation")
+    if (conversationData) {
+      try {
+        const data = JSON.parse(conversationData)
+        setNewConversation(data)
+        setShowChatList(false) // Automatically show the chat interface
+        sessionStorage.removeItem("newConversation") // Clean up
+      } catch (error) {
+        console.error("Error parsing conversation data:", error)
+      }
+    }
+  }, [])
 
   const handleSelectChat = (chatId: string) => {
     setSelectedChatId(chatId)
     setShowChatList(false)
+    setNewConversation(null) // Clear new conversation when selecting existing chat
   }
 
   const handleBackToList = () => {
     setShowChatList(true)
     setSelectedChatId(null)
+    setNewConversation(null) // Clear new conversation when going back to list
   }
 
   return (
@@ -52,8 +75,12 @@ export default function MessagesPage() {
 
           {/* Chat Interface - Hidden on mobile when no chat selected */}
           <div className={`lg:col-span-3 ${!showChatList ? "block" : "hidden lg:block"}`}>
-            {selectedChatId || !showChatList ? (
-              <ChatInterface currentUserId={currentUserId} currentUserRole={currentUserRole} />
+            {selectedChatId || !showChatList || newConversation ? (
+              <ChatInterface
+                currentUserId={currentUserId}
+                currentUserRole={currentUserRole}
+                newConversation={newConversation} // Pass new conversation data to chat interface
+              />
             ) : (
               <div className="hidden lg:flex h-[600px] items-center justify-center border rounded-lg bg-card">
                 <div className="text-center text-muted-foreground">

@@ -29,6 +29,9 @@ export default function Header() {
                   <Link href="/messages" className="text-gray-700 hover:text-black">
                     メッセージ
                   </Link>
+                  <Link href="/contact" className="text-gray-700 hover:text-black">
+                    お問い合わせ
+                  </Link>
                 </nav>
               )}
 
@@ -43,6 +46,9 @@ export default function Header() {
                   <Link href="/messages" className="text-gray-700 hover:text-black">
                     メッセージ
                   </Link>
+                  <Link href="/contact" className="text-gray-700 hover:text-black">
+                    お問い合わせ
+                  </Link>
                 </nav>
               )}
 
@@ -50,6 +56,9 @@ export default function Header() {
                 <nav className="hidden md:flex space-x-6">
                   <Link href="/admin" className="text-gray-700 hover:text-black">
                     管理画面
+                  </Link>
+                  <Link href="/contact" className="text-gray-700 hover:text-black">
+                    お問い合わせ
                   </Link>
                 </nav>
               )}
@@ -65,7 +74,10 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-700 hover:text-black">
+              <Link href="/contact" className="text-gray-700 hover:text-black">
+                お問い合わせ
+              </Link>
+              <Link href="/login" className="text-gray-700 hover:text-black">
                 ログイン
               </Link>
             </div>

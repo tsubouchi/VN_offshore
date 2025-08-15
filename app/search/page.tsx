@@ -198,8 +198,18 @@ export default function SearchPage() {
 
   const handleStartChat = (companyId: string, initialMessage: string) => {
     console.log("Starting chat with company:", companyId, "Message:", initialMessage)
-    // TODO: Create new conversation in database
-    // TODO: Navigate to chat interface
+    const company = companies.find((c) => c.id === companyId)
+    if (company) {
+      // Store the conversation data in sessionStorage for the messages page
+      const conversationData = {
+        companyId,
+        companyName: company.company_name,
+        companyLogo: company.logo_url,
+        initialMessage,
+        timestamp: new Date().toISOString(),
+      }
+      sessionStorage.setItem("newConversation", JSON.stringify(conversationData))
+    }
     router.push("/messages")
   }
 

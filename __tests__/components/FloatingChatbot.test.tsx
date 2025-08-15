@@ -140,6 +140,10 @@ describe('FloatingChatbot Component', () => {
   })
 
   it('should handle API errors gracefully', async () => {
+    // Suppress console.error for this test since we expect an error
+    const originalError = console.error
+    console.error = jest.fn()
+    
     // Mock API error
     ;(global.fetch as jest.Mock).mockRejectedValue(new Error('API Error'))
     
@@ -158,6 +162,9 @@ describe('FloatingChatbot Component', () => {
     await waitFor(() => {
       expect(screen.getByText(/エラーが発生しました/)).toBeInTheDocument()
     })
+    
+    // Restore console.error
+    console.error = originalError
   })
 
   it('should disable input while loading', async () => {

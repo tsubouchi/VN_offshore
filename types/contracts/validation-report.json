@@ -1,10 +1,123 @@
 {
-  "timestamp": "2025-08-22T05:06:30.669Z",
+  "timestamp": "2025-08-22T09:04:54.772Z",
   "summary": {
     "errors": 0,
     "warnings": 0,
-    "info": 0,
-    "total": 0
+    "info": 28,
+    "total": 28
   },
-  "issues": []
+  "issues": [
+    {
+      "type": "info",
+      "message": "DB column 'users.department' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.position' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.bio' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.avatar_url' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.linkedin_url' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.preferred_language' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.timezone' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.last_login_at' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'users.notification_preferences' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'messages.conversation_id' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.reviewer_name' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.reviewer_company' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.project_name' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.project_duration_months' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.project_value' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.rating_communication' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.rating_quality' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.rating_timeliness' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.rating_cost_effectiveness' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.pros' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.cons' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.would_recommend' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.verified_client' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.status' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.helpful_count' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.response_from_company' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.response_date' not exposed in UI"
+    },
+    {
+      "type": "info",
+      "message": "DB column 'reviews.attachments' not exposed in UI"
+    }
+  ]
 }

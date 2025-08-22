@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { FavoriteButton } from "@/components/ui/favorite-button"
 import { Star, MapPin, Users, Globe, MessageCircle } from "lucide-react"
 import type { Company } from "@/lib/supabase"
 import Image from "next/image"
@@ -153,7 +154,13 @@ export function CompanyCard({ company, onContact, onViewProfile }: CompanyCardPr
         </div>
 
         {/* Actions */}
-        <div className="flex space-x-2 pt-2">
+        <div className="flex gap-2 pt-2">
+          <FavoriteButton
+            companyId={company.id}
+            companyName={company.company_name}
+            size="sm"
+            className="flex-shrink-0"
+          />
           <Button 
             variant="outline" 
             className="flex-1 bg-transparent hover:bg-primary/10 hover:border-primary hover:text-primary transition-all duration-200 hover:scale-105" 

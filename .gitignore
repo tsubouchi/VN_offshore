@@ -5,46 +5,102 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+/.yarn/*
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/sdks
+!/.yarn/versions
 
 # testing
 /coverage
+/.nyc_output
+/test-results
+/playwright-report
+/playwright/.cache
+/e2e-results
+*.lcov
 
 # next.js
 /.next/
 /out/
+/dist/
+.next
+next-env.d.ts
 
 # production
 /build
+/public/workbox-*.js
+/public/sw.js
+/public/worker-*.js
 
 # misc
 .DS_Store
 *.pem
+*.p12
+*.key
+*.crt
+*.cert
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 .pnpm-debug.log*
 
-# local env files
-.env*.local
+# Environment files
+# Be specific to avoid ignoring .env.local.sample
+.env
 .env.local
+.env.development
+.env.test
+.env.production
+.env.staging
 .env.development.local
 .env.test.local
 .env.production.local
+.env.staging.local
+# Explicitly NOT ignoring .env.local.sample and .env.example
+!.env.local.sample
+!.env.example
+!.env.*.sample
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
+**/supabase/.env
+**/supabase/.env.local
+supabase/.env
+supabase/.env.local
+.supabase/
+
+# Database
+*.sql.backup
+*.sql.dump
+*.sqlite
+*.sqlite3
+*.db
+/data
+/database-backups
 
 # vercel
 .vercel
+.now
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+tsconfig.tsbuildinfo
 
 # IDEs and editors
 /.idea
+.idea/
 /.vscode
+.vscode/
 *.swp
 *.swo
+*.swn
 *~
 .project
 .classpath
@@ -52,18 +108,149 @@ next-env.d.ts
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
+.vim/
+.nvim/
+*.code-workspace
+.history/
+.ionide/
 
 # OS
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+.nfs*
 
 # Claude
 .claude/
+claude.json
 
 # Temporary files
 *.tmp
 *.temp
+*.bak
+*.backup
+*.old
 .cache/
+tmp/
+temp/
 
 # Build artifacts
 dist/
+build/
 *.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Bundle analysis
+/analyze
+/.bundle-stats
+/bundle-report.html
+stats.json
+
+# Storybook
+storybook-static/
+/storybook-static
+
+# PWA
+/public/precache.*.js
+/public/precache-manifest.*.json
+/public/service-worker.js
+
+# Package managers
+# Keep lock files for reproducible builds
+!pnpm-lock.yaml
+!package-lock.json
+!yarn.lock
+
+# Security
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+ssl/
+certificates/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Performance
+/performance
+lighthouse-report.html
+.lighthouseci/
+
+# Generated files
+/generated
+sitemap.xml
+robots.txt
+feed.xml
+
+# Monitoring
+.sentryclirc
+sentry.properties
+
+# Documentation build
+/docs-build
+/docs-dist
+
+# Contract validation (keep the contracts themselves)
+/types/contracts/*.log
+!/types/contracts/*.json
+
+# Migrations tracking (Supabase specific)
+**/migrations/*.lock
+!**/migrations/*.sql
+
+# Keep important config samples
+!*.sample
+!*.example
+!*.template

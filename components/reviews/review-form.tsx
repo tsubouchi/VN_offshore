@@ -17,7 +17,7 @@ interface ReviewFormProps {
   onCancel: () => void
 }
 
-interface ReviewData {
+export interface ReviewData {
   company_id: string
   rating: number
   title: string

@@ -6,6 +6,20 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel
+} from "@/components/ui/dropdown-menu"
+import { useToast } from "@/components/ui/toast-container"
+import { 
+  translateText, 
+  getUserPreferredLanguage, 
+  setUserPreferredLanguage
+} from "@/lib/translate"
 import { Send, Paperclip, MoreVertical, Phone, Video, Languages, Check, CheckCheck, Circle } from "lucide-react"
 
 interface Message {
@@ -55,12 +69,16 @@ interface ChatInterfaceProps {
 }
 
 export function ChatInterface({ currentUserId, currentUserRole, newConversation }: ChatInterfaceProps) {
+  const { addToast } = useToast()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState("")
   const [isTranslating, setIsTranslating] = useState(false)
   const [showTranslation, setShowTranslation] = useState<Record<string, boolean>>({})
+  const [userLanguage, setUserLanguage] = useState<'en' | 'ja' | 'vi'>('en')
+  const [translatedMessages, setTranslatedMessages] = useState<Record<string, string>>({})
+  // const [showQuickPhrases, setShowQuickPhrases] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Mock data for demonstration
@@ -254,14 +272,64 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
     // const { error } = await supabase.from('messages').insert(message)
   }
 
+  // Load user's preferred language on mount
+  useEffect(() => {
+    const lang = getUserPreferredLanguage()
+    setUserLanguage(lang)
+  }, [])
+
   const handleTranslateMessage = async (messageId: string) => {
-    setIsTranslating(true)
-    // TODO: Implement actual translation
-    setTimeout(() => {
+    const message = messages.find(m => m.id === messageId)
+    if (!message) return
+
+    // Toggle translation visibility if already translated
+    if (translatedMessages[messageId]) {
       setShowTranslation((prev) => ({ ...prev, [messageId]: !prev[messageId] }))
+      return
+    }
+
+    setIsTranslating(true)
+    try {
+      const result = await translateText(message.content, userLanguage)
+      setTranslatedMessages((prev: Record<string, string>) => ({
+        ...prev,
+        [messageId]: result.translatedText
+      }))
+      setShowTranslation((prev) => ({ ...prev, [messageId]: true }))
+      
+      if (result.confidence && result.confidence < 0.7) {
+        addToast({
+          type: "info",
+          title: "Translation Quality",
+          description: "This translation may not be perfect. Consider using professional translation for important messages."
+        })
+      }
+    } catch (error) {
+      console.error("Translation error:", error)
+      addToast({
+        type: "error",
+        title: "Translation Failed",
+        description: "Failed to translate message. Please try again."
+      })
+    } finally {
       setIsTranslating(false)
-    }, 1000)
+    }
   }
+
+  const handleLanguageChange = (lang: 'en' | 'ja' | 'vi') => {
+    setUserLanguage(lang)
+    setUserPreferredLanguage(lang)
+    addToast({
+      type: "success",
+      title: "Language Updated",
+      description: `Your preferred language has been set to ${lang === 'en' ? 'English' : lang === 'ja' ? 'Japanese' : 'Vietnamese'}`
+    })
+  }
+
+  // const handleQuickPhrase = async (phrase: string) => {
+  //   setNewMessage(phrase)
+  //   setShowQuickPhrases(false)
+  // }
 
   const formatTime = (timestamp: string) => {
     return new Date(timestamp).toLocaleTimeString("en-US", {
@@ -348,6 +416,27 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
                   </Badge>
                 </div>
                 <div className="flex items-center gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm">
+                        <Languages className="h-4 w-4 mr-2" />
+                        {userLanguage.toUpperCase()}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Select Language</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+                        English
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleLanguageChange('ja')}>
+                        日本語 (Japanese)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleLanguageChange('vi')}>
+                        Tiếng Việt (Vietnamese)
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <Button variant="ghost" size="sm">
                     <Phone className="h-4 w-4" />
                   </Button>
@@ -377,12 +466,22 @@ export function ChatInterface({ currentUserId, currentUserRole, newConversation 
                           }`}
                         >
                           <p className="text-sm">
-                            {showTranslated && message.translated_content
-                              ? message.translated_content
-                              : message.content}
+                            {message.content}
                           </p>
 
-                          {message.translated_content && (
+                          {showTranslated && translatedMessages[message.id] && (
+                            <div className={`mt-2 pt-2 border-t ${
+                              isOwnMessage ? "border-primary-foreground/20" : "border-border"
+                            }`}>
+                              <p className={`text-sm italic ${
+                                isOwnMessage ? "text-primary-foreground/90" : "text-muted-foreground"
+                              }`}>
+                                {translatedMessages[message.id]}
+                              </p>
+                            </div>
+                          )}
+
+                          {!isOwnMessage && (
                             <Button
                               variant="ghost"
                               size="sm"

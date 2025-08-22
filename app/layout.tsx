@@ -4,6 +4,8 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 import { AuthProvider } from "@/lib/auth-context"
+import { FavoritesProvider } from "@/lib/favorites-context"
+import { ToastProvider } from "@/components/ui/toast-container"
 import Header from "@/components/header"
 import { FloatingChatbot } from "@/components/chatbot/floating-chatbot"
 import { ErrorBoundary } from "@/components/error-boundary"
@@ -33,13 +35,17 @@ html {
       </head>
       <body>
         <ErrorBoundary>
-          <AuthProvider>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Header />
-            </Suspense>
-            {children}
-            <FloatingChatbot />
-          </AuthProvider>
+          <ToastProvider>
+            <AuthProvider>
+              <FavoritesProvider>
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Header />
+                </Suspense>
+                {children}
+                <FloatingChatbot />
+              </FavoritesProvider>
+            </AuthProvider>
+          </ToastProvider>
         </ErrorBoundary>
       </body>
     </html>

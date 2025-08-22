@@ -11,6 +11,9 @@ import Link from "next/link"
 import Image from "next/image"
 import { CompanyProfileSkeleton } from "@/components/company/company-profile-skeleton"
 import { PageErrorBoundary } from "@/components/page-error-boundary"
+import { FavoriteButton } from "@/components/ui/favorite-button"
+import { ContactModal } from "@/components/contact/contact-modal"
+import { Breadcrumb } from "@/components/ui/breadcrumb"
 
 interface Portfolio {
   id: string
@@ -124,6 +127,7 @@ const MOCK_COMPANY: Company & {
 export default function CompanyProfilePage() {
   const [company, setCompany] = useState<typeof MOCK_COMPANY | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false)
 
   // Simulate loading company data
   useEffect(() => {
@@ -147,8 +151,22 @@ export default function CompanyProfilePage() {
   }
 
   const handleContact = () => {
-    // TODO: Implement contact functionality
-    console.log("Contact company:", company?.id)
+    setIsContactModalOpen(true)
+  }
+
+  const handleStartChat = (companyId: string, message: string) => {
+    // TODO: Integrate with real-time messaging
+    console.log("Starting chat with company:", companyId, "Message:", message)
+    // For now, simulate navigation to messages page
+    const conversationData = {
+      companyId,
+      companyName: company?.company_name,
+      companyLogo: company?.logo_url,
+      initialMessage: message,
+      timestamp: new Date().toISOString(),
+    }
+    sessionStorage.setItem("newConversation", JSON.stringify(conversationData))
+    // router.push("/messages") - uncomment when ready to redirect
   }
 
   if (isLoading || !company) {
@@ -158,8 +176,20 @@ export default function CompanyProfilePage() {
   return (
     <PageErrorBoundary>
       <div className="min-h-screen bg-background">
-      {/* Cover Image */}
-      <div className="relative h-64 bg-gradient-to-r from-primary/10 to-accent/10">
+        {/* Breadcrumb */}
+        <div className="border-b bg-card">
+          <div className="max-w-6xl mx-auto px-4 py-3">
+            <Breadcrumb
+              items={[
+                { label: "Companies", href: "/search" },
+                { label: company.company_name, current: true }
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Cover Image */}
+        <div className="relative h-64 bg-gradient-to-r from-primary/10 to-accent/10">
         <Image
           src={company.cover_image_url || "/placeholder.svg?height=300&width=800&query=modern office building"}
           alt="Company cover"
@@ -245,9 +275,13 @@ export default function CompanyProfilePage() {
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Contact Company
                 </Button>
-                <Button variant="outline" size="lg">
-                  Save to Favorites
-                </Button>
+                <FavoriteButton
+                  companyId={company.id}
+                  companyName={company.company_name}
+                  variant="outline"
+                  size="lg"
+                  showText={true}
+                />
               </div>
             </div>
           </CardContent>
@@ -454,6 +488,14 @@ export default function CompanyProfilePage() {
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* Contact Modal */}
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        company={company}
+        onStartChat={handleStartChat}
+      />
       </div>
     </PageErrorBoundary>
   )

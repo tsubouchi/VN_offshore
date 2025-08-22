@@ -6,6 +6,7 @@ import "./globals.css"
 import { AuthProvider } from "@/lib/auth-context"
 import Header from "@/components/header"
 import { FloatingChatbot } from "@/components/chatbot/floating-chatbot"
+import { ErrorBoundary } from "@/components/error-boundary"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
@@ -31,13 +32,15 @@ html {
         `}</style>
       </head>
       <body>
-        <AuthProvider>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Header />
-          </Suspense>
-          {children}
-          <FloatingChatbot />
-        </AuthProvider>
+        <ErrorBoundary>
+          <AuthProvider>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Header />
+            </Suspense>
+            {children}
+            <FloatingChatbot />
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

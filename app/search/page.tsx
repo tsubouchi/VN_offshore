@@ -4,11 +4,14 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { SearchFilters, type SearchFilters as SearchFiltersType } from "@/components/search/search-filters"
 import { CompanyCard } from "@/components/search/company-card"
+import { CompanyCardSkeleton } from "@/components/search/company-card-skeleton"
 import { InquiryModal } from "@/components/inquiry/inquiry-modal"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Spinner } from "@/components/ui/spinner"
 import { Search, Filter } from "lucide-react"
 import type { Company } from "@/lib/supabase"
+import { PageErrorBoundary } from "@/components/page-error-boundary"
 
 // Mock data for demonstration
 const MOCK_COMPANIES: (Company & { industries: string[]; technologies: string[] })[] = [
@@ -86,12 +89,14 @@ const MOCK_COMPANIES: (Company & { industries: string[]; technologies: string[] 
 
 export default function SearchPage() {
   const router = useRouter()
-  const [companies] = useState(MOCK_COMPANIES)
-  const [filteredCompanies, setFilteredCompanies] = useState(MOCK_COMPANIES)
+  const [companies, setCompanies] = useState<(Company & { industries: string[]; technologies: string[] })[]>([])
+  const [filteredCompanies, setFilteredCompanies] = useState<(Company & { industries: string[]; technologies: string[] })[]>([])
   const [selectedCompany, setSelectedCompany] = useState<
     (Company & { industries?: string[]; technologies?: string[] }) | null
   >(null)
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSearching, setIsSearching] = useState(false)
   const [filters, setFilters] = useState<SearchFiltersType>({
     search: "",
     industries: [],
@@ -104,12 +109,30 @@ export default function SearchPage() {
   })
   const [showFilters, setShowFilters] = useState(false)
 
+  // Simulate initial data loading
   useEffect(() => {
-    applyFilters()
+    const loadCompanies = async () => {
+      setIsLoading(true)
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      setCompanies(MOCK_COMPANIES)
+      setFilteredCompanies(MOCK_COMPANIES)
+      setIsLoading(false)
+    }
+    loadCompanies()
+  }, [])
+
+  useEffect(() => {
+    if (companies.length > 0) {
+      applyFilters()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, companies])
 
-  const applyFilters = () => {
+  const applyFilters = async () => {
+    setIsSearching(true)
+    // Simulate search delay
+    await new Promise(resolve => setTimeout(resolve, 300))
     let filtered = [...companies]
 
     // Search filter
@@ -190,6 +213,7 @@ export default function SearchPage() {
     })
 
     setFilteredCompanies(filtered)
+    setIsSearching(false)
   }
 
   const handleContact = (company: Company & { industries?: string[]; technologies?: string[] }) => {
@@ -219,7 +243,8 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageErrorBoundary>
+      <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b bg-card">
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -238,12 +263,17 @@ export default function SearchPage() {
 
           {/* Quick Search */}
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            {isSearching ? (
+              <Spinner size="sm" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
+            ) : (
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            )}
             <Input
               placeholder="Search companies..."
               value={filters.search}
               onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
               className="pl-10"
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -258,24 +288,35 @@ export default function SearchPage() {
 
           {/* Results */}
           <div className="flex-1">
-            <div className="mb-6">
-              <div className="flex items-center justify-between">
-                <p className="text-muted-foreground">{filteredCompanies.length} companies found</p>
+            {!isLoading && (
+              <div className="mb-6">
+                <div className="flex items-center justify-between">
+                  <p className="text-muted-foreground">
+                    {isSearching ? "Searching..." : `${filteredCompanies.length} companies found`}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="grid gap-6">
-              {filteredCompanies.map((company) => (
-                <CompanyCard
-                  key={company.id}
-                  company={company}
-                  onContact={handleContact}
-                  onViewProfile={handleViewProfile}
-                />
-              ))}
+              {isLoading ? (
+                // Show skeleton loading cards
+                Array.from({ length: 6 }).map((_, index) => (
+                  <CompanyCardSkeleton key={index} />
+                ))
+              ) : (
+                filteredCompanies.map((company) => (
+                  <CompanyCard
+                    key={company.id}
+                    company={company}
+                    onContact={handleContact}
+                    onViewProfile={handleViewProfile}
+                  />
+                ))
+              )}
             </div>
 
-            {filteredCompanies.length === 0 && (
+            {!isLoading && filteredCompanies.length === 0 && !isSearching && (
               <div className="text-center py-12">
                 <div className="text-muted-foreground mb-4">
                   <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -300,6 +341,7 @@ export default function SearchPage() {
           onStartChat={handleStartChat}
         />
       )}
-    </div>
+      </div>
+    </PageErrorBoundary>
   )
 }

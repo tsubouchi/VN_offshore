@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -9,6 +9,8 @@ import { Star, MapPin, Users, Globe, Calendar, Award, MessageCircle, ExternalLin
 import type { Company } from "@/lib/supabase"
 import Link from "next/link"
 import Image from "next/image"
+import { CompanyProfileSkeleton } from "@/components/company/company-profile-skeleton"
+import { PageErrorBoundary } from "@/components/page-error-boundary"
 
 interface Portfolio {
   id: string
@@ -120,7 +122,20 @@ const MOCK_COMPANY: Company & {
 }
 
 export default function CompanyProfilePage() {
-  const [company] = useState(MOCK_COMPANY)
+  const [company, setCompany] = useState<typeof MOCK_COMPANY | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Simulate loading company data
+  useEffect(() => {
+    const loadCompany = async () => {
+      setIsLoading(true)
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1200))
+      setCompany(MOCK_COMPANY)
+      setIsLoading(false)
+    }
+    loadCompany()
+  }, [])
 
   const renderStars = (rating: number, size?: string) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -133,11 +148,16 @@ export default function CompanyProfilePage() {
 
   const handleContact = () => {
     // TODO: Implement contact functionality
-    console.log("Contact company:", company.id)
+    console.log("Contact company:", company?.id)
+  }
+
+  if (isLoading || !company) {
+    return <CompanyProfileSkeleton />
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PageErrorBoundary>
+      <div className="min-h-screen bg-background">
       {/* Cover Image */}
       <div className="relative h-64 bg-gradient-to-r from-primary/10 to-accent/10">
         <Image
@@ -434,6 +454,7 @@ export default function CompanyProfilePage() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+      </div>
+    </PageErrorBoundary>
   )
 }
